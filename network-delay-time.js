@@ -11,7 +11,12 @@ var networkDelayTime = function(times, N, K) {
   
   traverse(times, graph[K], graph)
   
-  return graph[2].time ;
+  for (let i = 1; i < graph.length; i++) {
+      let node = graph[i];
+      if (node.time > longest) longest = node.time;
+  }
+  
+  return longest === Infinity ? -1 : longest;
 };
 
 var traverse = function(times, node, graph) {
@@ -26,13 +31,15 @@ var traverse = function(times, node, graph) {
 
       if (toward.time > newCost) toward.time = newCost;
 
-      
   }
   
+  node.visited = true;
   
   for (let i = 0; i < node.next.length; i++) {
-      let nextNode = node.next[i][0]
-      traverse(times, graph[nextNode], graph)
+      let nextNode = graph[node.next[i][0]]
+      if (!nextNode.visited) {
+          traverse(times, nextNode, graph)
+      }
   }
   
 }
